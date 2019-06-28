@@ -64,13 +64,26 @@ The CircleCI config syntax is very straight forward. The trickiest part is typic
 * Line 8: The name attribute provides useful organizational information when returning warnings, errors, and output. The name should be meaningful to you as an action within your build process
 * Line 9-11: This is the magic. The command attribute is a list of shell commands that represent the work you want done. The initial pipe, |, indicates that there will be more than one line of shell commands. Here line 10 will print out Hello World! in your build shell and line 11 will print out This is the delivery pipeline
 
-**Tasks**
+Paste the example into `.circleci/config.yml` and click `start building` in the CI dashboard.
 
-* Paste the example into `.circleci/config.yml` and click `start building` in the CI dashboard.
+You should see something like this in the logs of CircleCI:
 
+```bash
+#!/bin/sh -eo pipefail
+echo 'Hello World!'
+echo 'This is the delivery pipeline'
 
+Hello World!
+This is the delivery pipeline
+```
 
-### add gradle build step
+### Making a real pipeline
+
+Up untill now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
+
+tasks:
+
+* replace the image from `alpine:3.7` to s
 
 ### add gradle test step
 
