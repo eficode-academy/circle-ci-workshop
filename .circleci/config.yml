@@ -1,32 +1,11 @@
-version: 2
+version: 2.0
 jobs:
   build:
-    
-    # Primary container image where all commands run
-    
     docker:
-      - image: circleci/python:3.6.2-stretch-browsers
-        environment:
-          TEST_DATABASE_URL: postgresql://root@localhost/circle_test
-          
-    # Service container image
-    
-      - image: circleci/postgres:9.6.5-alpine-ram
-        
+      - image: alpine:3.7
     steps:
-      - checkout
-      - run: sudo apt-get update
-      - run: sudo apt-get install postgresql-client-9.6
-      - run: whoami
-      - run: |
-          psql \
-          -d $TEST_DATABASE_URL \
-          -c "CREATE TABLE test (name char(25));"
-      - run: |
-          psql \
-          -d $TEST_DATABASE_URL \
-          -c "INSERT INTO test VALUES ('John'), ('Joanna'), ('Jennifer');"
-      - run: |
-          psql \
-          -d $TEST_DATABASE_URL \
-          -c "SELECT * from test"
+      - run:
+          name: The First Step
+          command: |
+            echo 'Hello World!'
+            echo 'This is the delivery pipeline'
