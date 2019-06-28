@@ -1,11 +1,7 @@
-version: 2.0
+version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/openjdk:8-jdk
-
-    steps:
-      - checkout
-      - run:
-          name: The First build
-          command: gradle test
+ build:
+   machine: true
+   steps:
+     - checkout
+     - run: docker run hello-world

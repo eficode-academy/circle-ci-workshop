@@ -83,12 +83,55 @@ Up untill now, we have only made sure that CircleCI can reach the configuration 
 
 tasks:
 
-* replace the image from `alpine:3.7` to s
+* replace the image from `alpine:3.7` to the CircleCI docker image that has both JDK and Gradle installed named `circleci/openjdk:8-jdk`
+
+* Under the `steps` part, add another item to the list before run called `- checkout`
+
+* Change the `run` command from the multi-line linux bash script to just run `gradle test` as the command.
+
+Run now, and see that the build runs green and outputs this in the step log:
+
+```bash
+gradle test
+
+Welcome to Gradle 5.3!
+
+Here are the highlights of this release:
+ - Feature variants AKA "optional dependencies"
+ - Type-safe accessors in Kotlin precompiled script plugins
+ - Gradle Module Metadata 1.0
+
+For more details see https://docs.gradle.org/5.3/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :compileJava
+> Task :processResources NO-SOURCE
+> Task :classes
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+> Task :test
+
+BUILD SUCCESSFUL in 6s
+3 actionable tasks: 3 executed
+
+```
 
 ### add gradle test step
+https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
 ### Run a few iterations on the code
 
+Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
+
+
+### building and storing artifacts
+https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
+
 ### Adding the PR feature
 
-### Pointing towards multiple test
+Pr are build no matter what
+
+
+### Extra Reusing build cache
+
