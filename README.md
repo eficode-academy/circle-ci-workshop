@@ -126,14 +126,32 @@ Hint: The results of running `gradle test`are stored in a local directory: `buil
 
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
-
 ### building and storing artifacts
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
-### Adding the PR feature
+### Making docker images
 
-Pr are build no matter what
+In order to make 
+Following is an example of building a Docker image using machine with the default image:
 
+```YAML
+version: 2
+jobs:
+ build:
+   machine: true
+   steps:
+     - checkout
+     # Login to docker
+     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+     # build the application image
+     - run: docker build -t company/app:$CIRCLE_BRANCH .
+
+     # deploy the image
+     - run: docker push company/app:$CIRCLE_BRANCH
+```
+
+> Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables 
 
 ### Extra Reusing build cache
 
