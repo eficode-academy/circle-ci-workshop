@@ -120,6 +120,8 @@ BUILD SUCCESSFUL in 6s
 ### add gradle test step
 https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
+Hint: The results of running `gradle test`are stored in a local directory: `build/test-results`.
+
 ### Run a few iterations on the code
 
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
