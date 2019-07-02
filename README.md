@@ -262,9 +262,9 @@ workflows:
 
 ## Extra Reusing build cache
 
-CircleCI has a few different method for reusing files/artifacts produced in a job, in subsequents jobs or even in subsequent builds.
+CircleCI has a few different method for reusing files/artifacts produced in a job, in downstream jobs or even in subsequent builds.
 
-This is needed because each job in CircleCI is running in separate docker containers or machines.
+This is needed because each job in CircleCI is running in separate docker containers or machines, and no files are shared between these by default.
 
 ### Caching
 
