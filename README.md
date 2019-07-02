@@ -23,23 +23,26 @@ The description of the application can be read [here](gildedrose.md), but is not
 
 ## Setup
 
-You need to have your own repository with the code in order for CircleCI to work, and for you to merge in changes without anybody else conflicting with you.
+You need to have your own fork of the repository with the code in order for the exercises to work.
 
-### Set up the CircleCI configuration
+Next. you need to login to CircleCI and add your project in there.
+
+### Tasks
 
 Setting up your repository is fairly simple;
 
-* [login to the website](https://circleci.com/vcs-authorize/)
+* Fork this repository from the Github website into your own account.
+* [login to the CircleCI website](https://circleci.com/vcs-authorize/) using your GH handle.
 * Add your forked repository to the CircleCI dashboard: ![add project](img/add-project.png)
 * Leave the browser open and go back to the repository on your computer.
-* Create a folder named .circleci and add a fileconfig.yml (so that the filepath be in .circleci/config.yml). In the terminal you can do it like this:
+* Create a folder named .circleci and add a fileconfig.yml (so that the filepath be in .circleci/config.yml) in the root of the repository. In the terminal you can do it like this:
 
 ```bash
 mkdir .circleci
 touch .circleci/config.yml
 ```
 
-Now we have the basis to run a basic `hello world` build in CircleCI
+Now we have the basis to run a basic `hello world` build in CircleCI. But running it would make CircleCI complain, as there is nothing in the file
 
 ## Making "hello world"
 
@@ -86,6 +89,7 @@ This is the delivery pipeline
 ## Making a real pipeline
 
 Up untill now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
+We want it to clone down our code and run the tests on the code
 
 ### Tasks
 
