@@ -280,6 +280,8 @@ And since dependencies typically are defined in one central file, this file is h
       - my-project/my-dependencies-directory
 ```
 
+> https://circleci.com/docs/2.0/configuration-reference/#save_cache
+
 Retrieving the cache is done with:
 
 ```YAML
@@ -288,13 +290,15 @@ Retrieving the cache is done with:
       - my-dependencies-{{ checksum "build.gradle" }}
 ```
 
+> https://circleci.com/docs/2.0/configuration-reference/#restore_cache
+
 CircleCI does NOT do anything to make sure the dependencies are actually downloaded when storing the cache. So it is important to use these keywords in the right order.
 
 > All about caching: https://circleci.com/docs/2.0/caching/
 
 ### Workspaces
 
-A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. It is important that workspaces are only transfered within the same workflow, and not between builds like caching.
+A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. Workspaces are only transfered within the same workflow, and not between builds like caching.
 
 ```YAML
 - persist_to_workspace:
@@ -304,12 +308,16 @@ A `workspace` can be used to store files, which can then be retrieved and used b
       - baz
 ```
 
+> https://circleci.com/docs/2.0/configuration-reference/#persist_to_workspace
+
 And to "attach" the workspace in a downstream job:
 
 ```YAML
 - attach_workspace:
     at: /tmp/workspace
 ```
+
+> https://circleci.com/docs/2.0/configuration-reference/#attach_workspace
 
 This is very useful to store a build artifact when it is first build, to avoid having to rebuild the artifact in downstream jobs.
 
