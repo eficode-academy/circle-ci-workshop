@@ -118,6 +118,8 @@ BUILD SUCCESSFUL in 6s
 ```
 
 ### Add gradle test step
+Once a test step has been added to the pipeline it would be nice to see the results of the tests without having to dig trough output of the individual steps in CircleCI.
+
 To store test results in CircleCI use the following step:
 ```YAML
 - store_test_results:
@@ -126,15 +128,27 @@ To store test results in CircleCI use the following step:
 CircleCI supports a few diffrent test report formats.
 https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
-Hint: The results of running `gradle test`are stored in a local directory: `build/test-results`.
+Hint: The results of running `gradle test` are stored in a local directory: `build/test-results`.
 
 ### Run a few iterations on the code
 
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
 ### Building and storing artifacts
+To build a jar file run `gradle jar`.
 
+It is possible to store artifacts in CircleCI. This is not to be mistaken for artifact management, but it is a nice way to make files available in the CircleCI web interface.
+
+To store artifacts use the following step:
+```YAML
+- store_artifacts:
+    path: /code/test-results
+    destination: prefix
+```
+More information:
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
+
+Hint: The results of running `gradle jar` are stored in a local directory: `build/libs`
 
 ### Making docker images
 
