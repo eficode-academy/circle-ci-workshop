@@ -262,4 +262,32 @@ workflows:
 
 ## Extra Reusing build cache
 
+CircleCI has a few different method for reusing files/artifacts produced in a job, in subsequents jobs or even in subsequent builds.
+
+This is needed because each job in CircleCI is running in separate docker containers or machines.
+
+### Caching
+
+The caching mechanism is persistent across multiple builds, and therefore a key is needed.
+
+One example is to store downloaded dependencies in a cache, to avoid downloading the same dependencies over and over.
+And since dependencies typically are defined in one central file, this file is hashed and used as a key:
+
+```YAML
+- save_cache:
+    key: my-dependencies-{{ checksum "build.gradle" }}
+    paths:
+      - my-project/my-dependencies-directory
+```
+
+Retrieving the cache is done with:
+
+```YAML
+- restore_cache:
+    keys:
+      - my-dependencies-{{ checksum "build.gradle" }}
+```
+
+CircleCI does NOT do anything to make sure the dependencies are actually downloaded when storing the cache. So it is important to use these keywords in the right order.
+
 > All about caching: https://circleci.com/docs/2.0/caching/
