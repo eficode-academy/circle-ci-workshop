@@ -8,16 +8,20 @@ This workshop will go through the basic steps in their system, making you able t
 
 ## Coding Assignment
 
-While the purpose is to learn CircleCI, this will be a coding assignment. It is made just to give you some tangible code to work with:
+While the purpose is to learn CircleCI, this will also be some coding involved.
+
+It is made just to give you some tangible code to work with:
 Remember, this is not a programming exercise, but a CI one; code is only there so you have something to build :)
 
-This repository comes with a maven based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from (this repository)[https://github.com/emilybache/GildedRose-Refactoring-Kata].
+This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from (this repository)[https://github.com/emilybache/GildedRose-Refactoring-Kata] is your source.
 
-The description of the application can be read [here](gildedrose.md), but is not necessary yet.
+Just clone down the repository listed above and replace with your language of choice.
 
-## Tasks
+> Some of the tasks makes the asumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation.
 
-### Fork the repository
+The description of the application can be read [here](gildedrose.md), but is not necessary to read just yet.
+
+## Setup
 
 You need to have your own repository with the code in order for CircleCI to work, and for you to merge in changes without anybody else conflicting with you.
 
@@ -37,7 +41,7 @@ touch .circleci/config.yml
 
 Now we have the basis to run a basic `hello world` build in CircleCI
 
-### Making "hello world"
+## Making "hello world"
 
 CircleCI is configured through the YAML file we just created.
 In order for us to make the first `hello world` script, examine the following example:
@@ -64,7 +68,9 @@ The CircleCI config syntax is very straight forward. The trickiest part is typic
 * Line 8: The name attribute provides useful organizational information when returning warnings, errors, and output. The name should be meaningful to you as an action within your build process
 * Line 9-11: This is the magic. The command attribute is a list of shell commands that represent the work you want done. The initial pipe, |, indicates that there will be more than one line of shell commands. Here line 10 will print out Hello World! in your build shell and line 11 will print out This is the delivery pipeline
 
-Paste the example into `.circleci/config.yml` and click `start building` in the CI dashboard.
+### Tasks
+
+* Paste the example into `.circleci/config.yml` and click `start building` in the CI dashboard.
 
 You should see something like this in the logs of CircleCI:
 
@@ -77,19 +83,16 @@ Hello World!
 This is the delivery pipeline
 ```
 
-### Making a real pipeline
+## Making a real pipeline
 
 Up untill now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
 
-tasks:
+### Tasks
 
 * replace the image from `alpine:3.7` to the CircleCI docker image that has both JDK and Gradle installed named `circleci/openjdk:8-jdk`
-
 * Under the `steps` part, add another item to the list before run called `- checkout`
-
 * Change the `run` command from the multi-line linux bash script to just run `gradle test` as the command.
-
-Run now, and see that the build runs green and outputs this in the step log:
+* Run now, and see that the build runs green and outputs this in the step log:
 
 ```bash
 gradle test
@@ -117,7 +120,9 @@ BUILD SUCCESSFUL in 6s
 
 ```
 
-### Add gradle test step
+Congratulations, you have now run the tests in your code!
+
+## Add gradle test step
 
 Once a test step has been added to the pipeline it would be nice to see the results of the tests without having to dig trough output of the individual steps in CircleCI.
 
@@ -133,15 +138,17 @@ https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
 Hint: The results of running `gradle test` are stored in a local directory: `build/test-results`.
 
-### Run a few iterations on the code
+## Run a few iterations on the code
 
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
-### Building and storing artifacts
+## Building and storing artifacts
 
 To build a jar file run `gradle jar`.
 
-It is possible to store artifacts in CircleCI. This is not to be mistaken for artifact management, but it is a nice way to make files available in the CircleCI web interface.
+It is possible to store artifacts in CircleCI.
+
+> This is not to be mistaken for artifact management, but it is a nice way to make files available in the CircleCI web interface.
 
 To store artifacts use the following keywords:
 
@@ -154,9 +161,11 @@ To store artifacts use the following keywords:
 More information:
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
+When you have larger or more complex projects, you’ll want separate jobs to do separate things (i.e. build vs. test). Despite the fact our example project is super simple, we will devide the workload to demonstrate the functionality.
+
 Up until now, we have had a job called `build` for the `gradle test`, but that is not really the correct phraising. The only reason we have done this, is because CircleCI **requires** you to have one job called `build`
 
-**Tasks**
+### Tasks
 
 1. Make another job in the circleCI config, that is a plain copy of the first one.
 1. Rename the first job to `test`
@@ -164,7 +173,7 @@ Up until now, we have had a job called `build` for the `gradle test`, but that i
 
 > Hint: The results of running `gradle jar` are stored in a local directory: `build/libs`
 
-### Making docker images
+## Making docker images
 
 In order to make your own application
 Following is an example of building a Docker image using machine with the default image:
@@ -188,12 +197,12 @@ jobs:
 
 > Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables 
 
-### Workflow
+## Workflow
 
 // Want to talk about adding more steps and a workflow.
 // That including in "package only if on master" flow
 All about workflows: https://circleci.com/docs/2.0/workflows/
 
-### Extra Reusing build cache
+## Extra Reusing build cache
 
 All about caching: https://circleci.com/docs/2.0/caching/
