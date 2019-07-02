@@ -178,6 +178,7 @@ jobs:
 
 // Want to talk about adding more steps and a workflow.
 // That including in "package only if on master" flow
+All about workflows in CircleCI: https://circleci.com/docs/2.0/workflows/#section=jobs
 
 ### Extra Reusing build cache
 
