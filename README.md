@@ -117,7 +117,13 @@ BUILD SUCCESSFUL in 6s
 
 ```
 
-### add gradle test step
+### Add gradle test step
+To store test results in CircleCI use the following step:
+```YAML
+- store_test_results:
+    path: test-results
+```
+CircleCI supports a few diffrent test report formats.
 https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
 Hint: The results of running `gradle test`are stored in a local directory: `build/test-results`.
@@ -126,7 +132,7 @@ Hint: The results of running `gradle test`are stored in a local directory: `buil
 
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
-### building and storing artifacts
+### Building and storing artifacts
 
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
