@@ -291,3 +291,26 @@ Retrieving the cache is done with:
 CircleCI does NOT do anything to make sure the dependencies are actually downloaded when storing the cache. So it is important to use these keywords in the right order.
 
 > All about caching: https://circleci.com/docs/2.0/caching/
+
+### Workspaces
+
+A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. It is important that workspaces are only transfered within the same workflow, and not between builds like caching.
+
+```YAML
+- persist_to_workspace:
+    root: /tmp/dir
+    paths:
+      - foo/bar
+      - baz
+```
+
+And to "attach" the workspace in a downstream job:
+
+```YAML
+- attach_workspace:
+    at: /tmp/workspace
+```
+
+This is very useful to store a build artifact when it is first build, to avoid having to rebuild the artifact in downstream jobs.
+
+> All about workspaces: https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
