@@ -127,11 +127,12 @@ Hint: The results of running `gradle test`are stored in a local directory: `buil
 Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
 ### building and storing artifacts
+
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
 ### Making docker images
 
-In order to make 
+In order to make your own application
 Following is an example of building a Docker image using machine with the default image:
 
 ```YAML
@@ -152,6 +153,11 @@ jobs:
 ```
 
 > Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables 
+
+### Workflow
+
+// Want to talk about adding more steps and a workflow.
+// That including in "package only if on master" flow
 
 ### Extra Reusing build cache
 
