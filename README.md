@@ -199,10 +199,63 @@ jobs:
 
 ## Workflow
 
-// Want to talk about adding more steps and a workflow.
-// That including in "package only if on master" flow
-All about workflows: https://circleci.com/docs/2.0/workflows/
+So far the build has been one job called `build`. But it is also possible to use multiple jobs, organized in a what CircleCI calls a `Workflow`.
+
+```YAML
+version: 2
+jobs:
+  job-1:
+    ... steps and so on
+  job-2:
+    ... other steps
+```
+
+To run multiple jobs a `workflows` section is needed:
+
+```YAML
+workflows:
+  version: 2
+  two_job_flow:
+    jobs:
+      - job-1
+      - job-2
+```
+
+This just runs the two jobs simultaneously and in no particular order. But is possible to do sequential flows, fan in/out and so on. To run the job sequentially use this:
+
+```YAML
+workflows:
+  version: 2
+  two_job_flow:
+    jobs:
+      - job-1
+      - job-2:
+          requires:
+            -job-1
+```
+
+This also ensures that `job-2` is not run if `job-1` fails.
+
+It is also possible to filter on branch names. This is useful to create a flow, where different branches go trough different jobs. For instance `feature/*` branches could be tested, while the `master` branch is both tested and an artifact is created and stored.
+
+```YAML
+workflows:
+  version: 2
+  feature_master:
+    jobs:
+      - test_feature:
+          filters:
+            branches:
+              only:
+                - feature/*
+      - test_and_build_master:
+          filters:
+            branches:
+              only: master
+```
+
+> All about workflows: https://circleci.com/docs/2.0/workflows/
 
 ## Extra Reusing build cache
 
-All about caching: https://circleci.com/docs/2.0/caching/
+> All about caching: https://circleci.com/docs/2.0/caching/
