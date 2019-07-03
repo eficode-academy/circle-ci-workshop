@@ -88,8 +88,9 @@ This is the delivery pipeline
 
 ## Making a real pipeline
 
-Up until now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
-We now want it to clone down our code and run the tests on the code.
+Up until now, we have only made sure that CircleCI can reach the configuration file, but not really made it do anything useful related to our actual code.
+
+As a next step, we want CircleCI to actually clone our project, build the code and run the tests.
 
 ### Tasks
 
@@ -130,7 +131,7 @@ Congratulations, you have now run the tests in your code!
 
 Once a test step has been added to the pipeline it would be nice to see the results of the tests without having to dig through output of the individual steps in CircleCI.
 
-To store test results in CircleCI use the following step:
+To store test results in CircleCI use the following syntax:
 
 ```YAML
 - store_test_results:
@@ -156,7 +157,7 @@ It is possible to store artifacts in CircleCI.
 
 > This is not to be mistaken for artifact management, but it is a nice way to make files available in the CircleCI web interface.
 
-To store artifacts use the following keywords:
+To store artifacts use the following syntax:
 
 ```YAML
 - store_artifacts:
@@ -169,15 +170,104 @@ https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
 When you have larger or more complex projects, you’ll want separate jobs to do separate things (i.e. build vs. test). Despite the fact our example project is super simple, we will devide the workload to demonstrate the functionality.
 
-Up until now, we have had a job called `build` for the `gradle test`, but that is not really the correct phraising. The only reason we have done this, is because CircleCI **requires** you to have one job called `build`
+Up until now, we have had a job called `build` for the `gradle test`, but that is not really the correct phrasing. The only reason we have done this, is because CircleCI **requires** you to have one job called `build`
 
 ### Tasks
 
-1. Make another job in the circleCI config, that is a plain copy of the first one.
-1. Rename the first job to `test`
-1. Make the `build` job run `gradle jar` and store the artifact it produces.
+1. Add another `run` step to your `build` job that runs `gradle jar`, then add a step that stores the artifact it produces.
 
-> Hint: The results of running `gradle jar` are stored in a local directory: `build/libs`
+> Hint: The results of running `gradle jar` are actually stored in a local directory: `build/libs`
+
+If all works out fine, your newest build should show something like:
+![stored artifacts screenshot](img/artifact.png)
+
+
+## Workflow
+
+So far we have only had one "job" called `build` even though it now has multiple steps. 
+
+It is also possible to use multiple jobs, organized in a what CircleCI calls a `Workflow`.
+
+To use workflows we first have to define the jobs, i.e.:
+
+```YAML
+version: 2
+jobs:
+  job-1:
+    ... steps and so on
+  job-2:
+    ... other steps
+```
+
+Then we have to declare a `workflows` section that runs the defined jobs.
+
+```YAML
+workflows:
+  version: 2
+  two_job_flow:
+    jobs:
+      - job-1
+      - job-2
+```
+
+However, this simple example just runs the two jobs simultaneously, which is often not what we want. 
+
+Luckily, workflows let us do things like sequential flows, fan out, fan in and so on. 
+
+To run the two job sequentially we define a workflow where job-2 "requires" job-1 to have run before it starts.
+
+```YAML
+workflows:
+  version: 2
+  two_job_flow:
+    jobs:
+      - job-1
+      - job-2:
+          requires:
+            - job-1
+```
+
+This also ensures that `job-2` is not run if `job-1` fails.
+
+It is also possible to filter on branch names. This is useful to create a flow, where different branches go trough different jobs. For instance `feature/*` branches could be tested, while the `master` branch is both tested and an artifact is created and stored.
+
+```YAML
+workflows:
+  version: 2
+  feature_master:
+    jobs:
+      - test_feature:
+          filters:
+            branches:
+              only:
+                - feature/*
+      - test_and_build_master:
+          filters:
+            branches:
+              only: master
+```
+
+> All about workflows: https://circleci.com/docs/2.0/workflows/
+
+
+### Tasks
+Lets try to clean up our current build by utilising the workflows feature.
+
+1. Make another job in the CircleCI config, that is a plain copy of the first one.
+2. Rename the first job to `test`.
+3. Make a `test` job that builds and tests the code, and stores the test results.
+4. Make a `package` job that assembles the jar file and stores this artifact.
+
+If you don't do anything else, you will notice that your CircleCI build fails, as it is still looking for a default job called `build` so let's add the needed `workflows` section. You should be able to do this based on the sample code above.
+
+When you run this workflow in CircleCI, you will see a link with your workflow name at the top of the page. 
+
+![Screenshot workflow link](img/workflow-link.png)
+
+Opening it should show something like:
+
+![Screenshot workflow](img/workflow-screenshot.png)
+
 
 ## Making docker images
 
@@ -203,64 +293,6 @@ jobs:
 
 > Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
-## Workflow
-
-So far the build has been one job called `build`. But it is also possible to use multiple jobs, organized in a what CircleCI calls a `Workflow`.
-
-```YAML
-version: 2
-jobs:
-  job-1:
-    ... steps and so on
-  job-2:
-    ... other steps
-```
-
-To run multiple jobs a `workflows` section is needed:
-
-```YAML
-workflows:
-  version: 2
-  two_job_flow:
-    jobs:
-      - job-1
-      - job-2
-```
-
-This just runs the two jobs simultaneously and in no particular order. But is possible to do sequential flows, fan in/out and so on. To run the job sequentially use this:
-
-```YAML
-workflows:
-  version: 2
-  two_job_flow:
-    jobs:
-      - job-1
-      - job-2:
-          requires:
-            -job-1
-```
-
-This also ensures that `job-2` is not run if `job-1` fails.
-
-It is also possible to filter on branch names. This is useful to create a flow, where different branches go trough different jobs. For instance `feature/*` branches could be tested, while the `master` branch is both tested and an artifact is created and stored.
-
-```YAML
-workflows:
-  version: 2
-  feature_master:
-    jobs:
-      - test_feature:
-          filters:
-            branches:
-              only:
-                - feature/*
-      - test_and_build_master:
-          filters:
-            branches:
-              only: master
-```
-
-> All about workflows: https://circleci.com/docs/2.0/workflows/
 
 ## Extra Reusing build cache
 
