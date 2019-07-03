@@ -17,7 +17,7 @@ This repository comes with a gradle based java project from the start, but any l
 
 Just clone the repository listed above and replace with your language of choice.
 
-> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a languages you are comfortable with.
+> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a language you are comfortable with.
 
 The description of the application can be read [here](gildedrose.md), but is not necessary to read just yet.
 
