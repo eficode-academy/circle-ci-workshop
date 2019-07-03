@@ -4,45 +4,45 @@ CircleCI is a continuous integration and build Software as a Service (SaaS).
 
 This workshop will go through the basic steps in their system, making you able to make CI builds in the end.
 
-> Note: at the time of writing, CircleCI have a free 2,5 build hours per week, which should be enough for this exercise. But it's not an "all you can eat" buffet :)
+> Note: at the time of writing, CircleCI has a free tier with 2,5 build hours per week. This should be enough for this exercise, but it's not an "all you can eat" buffet :)
 
 ## Coding Assignment
 
-While the purpose is to learn CircleCI, this will also be some coding involved.
+While the purpose is to learn CircleCI, there will also be some coding involved.
 
-It is made just to give you some tangible code to work with:
+This is done just to give you some tangible code to work with:
 Remember, this is not a programming exercise, but a CI one; code is only there so you have something to build :)
 
-This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from (this repository)[https://github.com/emilybache/GildedRose-Refactoring-Kata] is your source.
+This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this (GildedRose Refactoring Kata)[https://github.com/emilybache/GildedRose-Refactoring-Kata] repository.
 
-Just clone down the repository listed above and replace with your language of choice.
+Just clone the repository listed above and replace with your language of choice.
 
-> Some of the tasks makes the asumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation.
+> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a languages you are comfortable with.
 
 The description of the application can be read [here](gildedrose.md), but is not necessary to read just yet.
 
 ## Setup
 
-You need to have your own fork of the repository with the code in order for the exercises to work.
+You need to have your own fork of this workshop repository in order for the exercises to work.
 
-Next. you need to login to CircleCI and add your project in there.
+Next, you need to login to CircleCI and add your project in there.
 
 ### Tasks
 
 Setting up your repository is fairly simple;
 
-* Fork this repository from the Github website into your own account.
+* Fork this repository from the Github website into your own account, and then git clone the project from your own fork.
 * [login to the CircleCI website](https://circleci.com/vcs-authorize/) using your GH handle.
 * Add your forked repository to the CircleCI dashboard: ![add project](img/add-project.png)
 * Leave the browser open and go back to the repository on your computer.
-* Create a folder named .circleci and add a fileconfig.yml (so that the filepath be in .circleci/config.yml) in the root of the repository. In the terminal you can do it like this:
+* Create a folder named .circleci and add a file called config.yml (so that the file path will be .circleci/config.yml relative to the root of the repository). In the terminal you can do it like this:
 
 ```bash
 mkdir .circleci
 touch .circleci/config.yml
 ```
 
-Now we have the basis to run a basic `hello world` build in CircleCI. But running it would make CircleCI complain, as there is nothing in the file
+Now we have set up the fundamentals to run a basic `hello world` build in CircleCI. However, running it would make CircleCI complain, as there is nothing in the file
 
 ## Making "hello world"
 
@@ -65,17 +65,17 @@ jobs:
 
 The CircleCI config syntax is very straight forward. The trickiest part is typically indentation. Make sure your indentation is consistent. This is the single most common error in config. Let’s go over the nine lines in details
 
-* Line 1: This indicates the version of the CircleCI platform you are using. 2.0 is the most recent version.
-* Line 2-3: The jobs level contains a collection of arbitrarily named children. build is the first named child in the jobs collection. In this case build is also the only job.
-* Line 6-7: The steps collection is an ordered list of run directives. Each run directive is executed in the order in which it was declared.
-* Line 8: The name attribute provides useful organizational information when returning warnings, errors, and output. The name should be meaningful to you as an action within your build process
-* Line 9-11: This is the magic. The command attribute is a list of shell commands that represent the work you want done. The initial pipe, |, indicates that there will be more than one line of shell commands. Here line 10 will print out Hello World! in your build shell and line 11 will print out This is the delivery pipeline
+* Line 1: This indicates the version of the CircleCI platform you are using. `2.0` is the most recent version.
+* Line 2-3: The `jobs` level contains a collection of arbitrarily named children. `build:` is the first named child in the jobs collection. In this case build is also the only job.
+* Line 6-7: The `steps` collection is an ordered list of `run` directives. Each `run` directive is executed in the order in which it was declared.
+* Line 8: The `name` attribute provides useful organizational information when returning warnings, errors, and output. The name should be meaningful to you as an action within your build process
+* Line 9-11: This is the magic. The `command` attribute is a list of shell commands that represent the work you want done. The initial pipe, `|`, indicates a multi-line string containing more than one line of shell commands. Here line 10 will print out _Hello World!_ in your build shell and line 11 will print out _This is the delivery pipeline_
 
 ### Tasks
 
-* Paste the example into `.circleci/config.yml` and click `start building` in the CI dashboard.
+* Paste the example into `.circleci/config.yml`. Commit the file and push it to GitHub. Then go back to the CircleCI page and click *Start building* in the CI dashboard.
 
-You should see something like this in the logs of CircleCI:
+You should see something like this in the logs of CircleCI: (Note: The logs can be a bit hard to the first time :-), but give it a shot)
 
 ```bash
 #!/bin/sh -eo pipefail
@@ -88,15 +88,15 @@ This is the delivery pipeline
 
 ## Making a real pipeline
 
-Up untill now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
-We want it to clone down our code and run the tests on the code
+Up until now, we have only made sure that CircleCI can reach the configuration file, but not really made it clone down our repository.
+We now want it to clone down our code and run the tests on the code.
 
 ### Tasks
 
-* replace the image from `alpine:3.7` to the CircleCI docker image that has both JDK and Gradle installed named `circleci/openjdk:8-jdk`
-* Under the `steps` part, add another item to the list before run called `- checkout`
+* Instead of using the image `alpine:3.7`, we now want to use a docker image that has both JDK and Gradle installed. CircleCI provides one called `circleci/openjdk:8-jdk`, so add that to your config file.
+* Under the `steps` part, add a `- checkout` list item to the list before the existing ` - run:` item.
 * Change the `run` command from the multi-line linux bash script to just run `gradle test` as the command.
-* Run now, and see that the build runs green and outputs this in the step log:
+* Commit and push the changes. CircleCI should automatically detect your new commit and build again. See that the build runs green and outputs this in the step log:
 
 ```bash
 gradle test
@@ -128,7 +128,7 @@ Congratulations, you have now run the tests in your code!
 
 ## Add gradle test step
 
-Once a test step has been added to the pipeline it would be nice to see the results of the tests without having to dig trough output of the individual steps in CircleCI.
+Once a test step has been added to the pipeline it would be nice to see the results of the tests without having to dig through output of the individual steps in CircleCI.
 
 To store test results in CircleCI use the following step:
 
@@ -137,10 +137,12 @@ To store test results in CircleCI use the following step:
     path: test-results
 ```
 
-CircleCI supports a few diffrent test report formats.
+CircleCI supports a few different test report formats.
 https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 
 Hint: The results of running `gradle test` are stored in a local directory: `build/test-results`.
+
+If all works as intended, you should see something like ![test results screenshot](img/test-results.png).
 
 ## Run a few iterations on the code
 
@@ -199,7 +201,7 @@ jobs:
      - run: docker push company/app:$CIRCLE_BRANCH
 ```
 
-> Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables 
+> Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 ## Workflow
 
