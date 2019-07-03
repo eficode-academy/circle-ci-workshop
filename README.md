@@ -168,7 +168,7 @@ To store artifacts use the following syntax:
 More information:
 https://circleci.com/docs/2.0/configuration-reference/#store_artifacts
 
-When you have larger or more complex projects, you’ll want separate jobs to do separate things (i.e. build vs. test). Despite the fact our example project is super simple, we will devide the workload to demonstrate the functionality.
+When you have larger or more complex projects, you’ll want separate jobs to do separate things (i.e. build vs. test). Despite the fact our example project is super simple, we will divide the workload to demonstrate the functionality.
 
 Up until now, we have had a job called `build` for the `gradle test`, but that is not really the correct phrasing. The only reason we have done this, is because CircleCI **requires** you to have one job called `build`
 
@@ -184,7 +184,7 @@ If all works out fine, your newest build should show something like:
 
 ## Workflow
 
-So far we have only had one "job" called `build` even though it now has multiple steps. 
+So far we have only had one "job" called `build` even though it now has multiple steps.
 
 It is also possible to use multiple jobs, organized in a what CircleCI calls a `Workflow`.
 
@@ -210,9 +210,9 @@ workflows:
       - job-2
 ```
 
-However, this simple example just runs the two jobs simultaneously, which is often not what we want. 
+However, this simple example just runs the two jobs simultaneously, which is often not what we want.
 
-Luckily, workflows let us do things like sequential flows, fan out, fan in and so on. 
+Luckily, workflows let us do things like sequential flows, fan out, fan in and so on.
 
 To run the two job sequentially we define a workflow where job-2 "requires" job-1 to have run before it starts.
 
@@ -251,7 +251,7 @@ workflows:
 
 
 ### Tasks
-Lets try to clean up our current build by utilising the workflows feature.
+Let's try to clean up our current build by utilizing a feature called workflows.
 
 1. Make another job in the CircleCI config, that is a plain copy of the first one.
 2. Rename the first job to `test`.
@@ -260,7 +260,7 @@ Lets try to clean up our current build by utilising the workflows feature.
 
 If you don't do anything else, you will notice that your CircleCI build fails, as it is still looking for a default job called `build` so let's add the needed `workflows` section. You should be able to do this based on the sample code above.
 
-When you run this workflow in CircleCI, you will see a link with your workflow name at the top of the page. 
+When you run this workflow in CircleCI, you will see a link with your workflow name at the top of the page.
 
 ![Screenshot workflow link](img/workflow-link.png)
 
@@ -295,10 +295,10 @@ jobs:
 
 If you wanted to try this on the GilderRose project, you would have to complete the snippet, write a suitable `Dockerfile` and integrate this build step in the existing workflow.
 
-> Hint: yYou can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+> Hint: You can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 
-# Extra topics 
+# Extra topics
 
 ## Reusing build cache
 
@@ -338,7 +338,7 @@ CircleCI does NOT do anything to make sure the dependencies are actually downloa
 
 ### Workspaces
 
-A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. Workspaces are only transfered within the same workflow, and not between builds like caching.
+A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. Workspaces are only transferred within the same workflow, and not between builds like caching.
 
 ```YAML
 - persist_to_workspace:
