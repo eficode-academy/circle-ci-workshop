@@ -298,11 +298,13 @@ If you wanted to try this on the GilderRose project, you would have to complete 
 > Hint: yYou can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 
-## Extra Reusing build cache
+# Extra topics 
 
-CircleCI has a few different method for reusing files/artifacts produced in a job, in downstream jobs or even in subsequent builds.
+## Reusing build cache
 
-This is needed because each job in CircleCI is running in separate docker containers or machines, and no files are shared between these by default.
+CircleCI has a few different methods for reusing files and artifacts produced in a job, in downstream jobs or even in subsequent builds.
+
+This is needed because each job in CircleCI is running in a separate docker container or machine, and by default no files are shared between these.
 
 ### Caching
 
