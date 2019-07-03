@@ -42,7 +42,7 @@ mkdir .circleci
 touch .circleci/config.yml
 ```
 
-Now we have set up the fundamentals to run a basic `hello world` build in CircleCI. However, running it would make CircleCI complain, as there is nothing in the file
+Now we have set up the fundamentals to run a basic `hello world` build in CircleCI. However, running it would make CircleCI complain, as there is nothing in the file.
 
 ## Making "hello world"
 
@@ -73,7 +73,7 @@ The CircleCI config syntax is very straight forward. The trickiest part is typic
 
 ### Tasks
 
-* Paste the example into `.circleci/config.yml`. Commit the file and push it to GitHub. Then go back to the CircleCI page and click *Start building* in the CI dashboard.
+* Paste the example into `.circleci/config.yml`. Commit the file and push it to GitHub. Then go back to the CircleCI page and click **Start building** in the CI dashboard.
 
 You should see something like this in the logs of CircleCI: (Note: The logs can be a bit hard to the first time :-), but give it a shot)
 
@@ -181,7 +181,6 @@ Up until now, we have had a job called `build` for the `gradle test`, but that i
 If all works out fine, your newest build should show something like:
 ![stored artifacts screenshot](img/artifact.png)
 
-
 ## Workflow
 
 So far we have only had one "job" called `build` even though it now has multiple steps.
@@ -268,9 +267,7 @@ Opening it should show something like:
 
 ![Screenshot workflow](img/workflow-screenshot.png)
 
-
 ## Making docker images
-
 
 Often we also want to have our application packaged as a docker image for easy distribution. Lucky for us, CircleCI has nice support for Docker built in.
 
