@@ -17,7 +17,7 @@ This repository comes with a gradle based java project from the start, but any l
 
 Just clone the repository listed above and replace with your language of choice.
 
-> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a language you are comfortable with.
+> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a languages you are comfortable with.
 
 The description of the application can be read [here](gildedrose.md), but is not necessary to read just yet.
 
@@ -271,13 +271,15 @@ Opening it should show something like:
 
 ## Making docker images
 
-In order to make your own application
-Following is an example of building a Docker image using machine with the default image:
+
+Often we also want to have our application packaged as a docker image for easy distribution. Lucky for us, CircleCI has nice support for Docker built in.
+
+The following is an example of a job that builds a Docker image. Instead of specifying a `image` to run on, we now use a `machine: true` instruction to give us an environment where we can run actual docker commands:
 
 ```YAML
 version: 2
 jobs:
- build:
+ dockerize:
    machine: true
    steps:
      - checkout
@@ -285,13 +287,15 @@ jobs:
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
      # build the application image
-     - run: docker build -t company/app:$CIRCLE_BRANCH .
+     - run: docker build -t company/app:$CIRCLE_SHA1 .
 
      # deploy the image
-     - run: docker push company/app:$CIRCLE_BRANCH
+     - run: docker push company/app:$CIRCLE_SHA1
 ```
 
-> Hint: you can find information about what Git SHA and other environment variables in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+If you wanted to try this on the GilderRose project, you would have to complete the snippet, write a suitable `Dockerfile` and integrate this build step in the existing workflow.
+
+> Hint: yYou can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 
 ## Extra Reusing build cache
