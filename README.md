@@ -13,7 +13,7 @@ While the purpose is to learn CircleCI, there will also be some coding involved.
 This is done just to give you some tangible code to work with:
 Remember, this is not a programming exercise, but a CI one; code is only there so you have something to build :)
 
-This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this (GildedRose Refactoring Kata)[https://github.com/emilybache/GildedRose-Refactoring-Kata] repository.
+This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this [GildedRose Refactoring Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata) repository.
 
 Just clone the repository listed above and replace with your language of choice.
 
