@@ -292,6 +292,8 @@ jobs:
 
 If you wanted to try this on the GilderRose project, you would have to complete the snippet, write a suitable `Dockerfile` and integrate this build step in the existing workflow.
 
+> Hint: We know that the Gilded rose is not an application that you can "run". So in order to "play" that it works, just add the build jar file in the image, and make a ENTRYPOINT that list the folder where you added the jar file.
+
 > Hint: You can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 
