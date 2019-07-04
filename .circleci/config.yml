@@ -1,11 +1,28 @@
 version: 2.0
 jobs:
+  test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run:
+          name: The First build
+          command: gradle test
   build:
     docker:
-      - image: alpine:3.7
+      - image: alpine:latest
     steps:
-      - run:
-          name: The First Step
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
+      - run: echo hello
+
+
+workflows:
+  version: 2
+  one_and_two:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
