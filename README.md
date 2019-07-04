@@ -284,13 +284,22 @@ jobs:
      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
      # build the application image
-     - run: docker build -t company/app:$CIRCLE_SHA1 .
+     - run: docker build -t $DOCKER_USER/myapp:$CIRCLE_SHA1 .
 
      # deploy the image
-     - run: docker push company/app:$CIRCLE_SHA1
+     - run: docker push $DOCKER_USER/myapp:$CIRCLE_SHA1
 ```
 
-If you wanted to try this on the GilderRose project, you would have to complete the snippet, write a suitable `Dockerfile` and integrate this build step in the existing workflow.
+If you wanted to try this on the GilderRose project, you would have to complete the snippet and integrate this build step in the existing workflow.
+
+**Don't forget to add a** `Dockerfile` to the root of your project as well. Something as simple as:
+
+```bash
+FROM alpine
+ENTRYPOINT echo "Hello Whale!"
+```
+
+would do for now as a proof of concept, as the Gilded Rose project isn't really runable anyway.
 
 > Hint: We know that the Gilded rose is not an application that you can "run". So in order to "play" that it works, just add the src folder in the image, and make a ENTRYPOINT that list the folder inside your container.
 
