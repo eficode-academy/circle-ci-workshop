@@ -31,7 +31,7 @@ Next, you need to login to CircleCI and add your project in there.
 
 Setting up your repository is fairly simple;
 
-* Fork this repository from the Github website into your own account, and then git clone the project from your own fork.
+* Fork this repository from the Github website into your own account, and then git clone the project from your own fork down to your computer.
 * [login to the CircleCI website](https://circleci.com/vcs-authorize/) using your GH handle.
 * Add your forked repository to the CircleCI dashboard: ![add project](img/add-project.png)
 * Leave the browser open and go back to the repository on your computer.
