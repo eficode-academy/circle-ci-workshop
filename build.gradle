@@ -1,10 +1,20 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'application'
 
 group = 'net.praqma.codeacademy'
 version = '0.0.1-SNAPSHOT'
 
 description = """gildedrose"""
+
+application {
+    mainClassName = 'net.praqma.codeacademy.gildedrose.Main'
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'net.praqma.codeacademy.gildedrose.Main'
+    }
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
