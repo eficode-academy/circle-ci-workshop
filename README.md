@@ -13,9 +13,7 @@ While the purpose is to learn CircleCI, there will also be some coding involved.
 This is done just to give you some tangible code to work with:
 Remember, this is not a programming exercise, but a CI one; code is only there so you have something to build :)
 
-This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this [GildedRose Refactoring Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata) repository.
-
-Just clone the repository listed above and replace with your language of choice.
+This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this [GildedRose Refactoring Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata) repository. Clone the repository listed above and replace with your language of choice.
 
 > Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a languages you are comfortable with.
 
@@ -161,7 +159,7 @@ To store artifacts use the following syntax:
 
 ```YAML
 - store_artifacts:
-    path: /code/test-results
+    path: /code/artifact
     destination: prefix
 ```
 
@@ -248,7 +246,6 @@ workflows:
 
 > All about workflows: https://circleci.com/docs/2.0/workflows/
 
-
 ### Tasks
 Let's try to clean up our current build by utilizing a feature called workflows.
 
@@ -266,6 +263,60 @@ When you run this workflow in CircleCI, you will see a link with your workflow n
 Opening it should show something like:
 
 ![Screenshot workflow](img/workflow-screenshot.png)
+
+## Workspaces
+
+Everytime you switch jobs in CircleCI, the container that runs the jobs gets destroyed at the end of the job.
+
+A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. Workspaces are only transferred within the same workflow.
+
+In order to reuse artifacts from one job to the next, you need to persist to a workspace and attach the workspace on the following jobs.
+
+Let's take this folder structure as an example:
+
+```bash
+.
+├── README.md
+└── test
+    ├── 1
+    │   └── 1.txt
+    ├── 2
+    │   └── 2.txt
+    └── textfile.txt
+
+```
+
+The syntax to persist files is the following:
+
+```YAML
+- persist_to_workspace:
+    root: test #the folder to start the workspace from.
+    paths: 
+      - 1 #if you want the files inside the 1 folder to be persisted.
+      - . #if you want all of test to be persisted in the workspace. Note: Do not use both path examples, since `1` is also in `.` path
+```
+
+> More information can be found here: https://circleci.com/docs/2.0/configuration-reference/#persist_to_workspace
+
+And to "attach" the workspace in a downstream job:
+
+```YAML
+- attach_workspace:
+    at: /tmp/workspace
+```
+
+This will make a folder in `/tmp/workspace` where the persisted files are stored, and you can use them in the job.
+
+> More information can be found here: https://circleci.com/docs/2.0/configuration-reference/#attach_workspace
+
+This is essential to store a build artifact when it is first build, to avoid having to rebuild the artifact in downstream jobs.
+
+> All about workspaces: https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
+
+### Tasks
+
+* Make sure that your job checking out the repository code is attached to the workspace, and that all other jobs needing the source code are attaching that workspace
+* Persist the jar file made in the `build` job. We are going to use it in the next section.
 
 ## Making docker images
 
@@ -292,11 +343,14 @@ jobs:
 
 If you wanted to try this on the GilderRose project, you would have to complete the snippet and integrate this build step in the existing workflow.
 
-**Don't forget to add a** `Dockerfile` to the root of your project as well. Something as simple as:
+**Don't forget to add a** `Dockerfile` to the root of your project as well.
+
+The image needs to be able to run the `java -jar XYZ` in order for you
 
 ```bash
-FROM alpine
-ENTRYPOINT echo "Hello Whale!"
+FROM openjdk:8
+#COPY the jar file into the container
+#ENTRYPOINT ["java", "-jar",....] 
 ```
 
 would do for now as a proof of concept, as the Gilded Rose project isn't really runable anyway.
@@ -304,7 +358,6 @@ would do for now as a proof of concept, as the Gilded Rose project isn't really 
 > Hint: We know that the Gilded rose is not an application that you can "run". So in order to "play" that it works, just add the src folder in the image, and make a ENTRYPOINT that list the folder inside your container.
 
 > Hint: You can find lots of information about `$CIRCLE_SHA1` and the other environment variables provided by CircleCI in https://circleci.com/docs/2.0/env-vars/ and https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
-
 
 # Extra topics
 
@@ -343,30 +396,3 @@ Retrieving the cache is done with:
 CircleCI does NOT do anything to make sure the dependencies are actually downloaded when storing the cache. So it is important to use these keywords in the right order.
 
 > All about caching: https://circleci.com/docs/2.0/caching/
-
-### Workspaces
-
-A `workspace` can be used to store files, which can then be retrieved and used by downstream jobs. Workspaces are only transferred within the same workflow, and not between builds like caching.
-
-```YAML
-- persist_to_workspace:
-    root: /tmp/dir
-    paths:
-      - foo/bar
-      - baz
-```
-
-> https://circleci.com/docs/2.0/configuration-reference/#persist_to_workspace
-
-And to "attach" the workspace in a downstream job:
-
-```YAML
-- attach_workspace:
-    at: /tmp/workspace
-```
-
-> https://circleci.com/docs/2.0/configuration-reference/#attach_workspace
-
-This is very useful to store a build artifact when it is first build, to avoid having to rebuild the artifact in downstream jobs.
-
-> All about workspaces: https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
