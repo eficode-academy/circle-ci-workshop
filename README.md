@@ -6,18 +6,13 @@ This workshop will go through the basic steps in their system, making you able t
 
 > Note: at the time of writing, CircleCI has a free tier with 2,5 build hours per week. This should be enough for this exercise, but it's not an "all you can eat" buffet :)
 
-## Coding Assignment
+## Build in ci code
 
-While the purpose is to learn CircleCI, there will also be some coding involved.
-
-This is done just to give you some tangible code to work with:
-Remember, this is not a programming exercise, but a CI one; code is only there so you have something to build :)
-
-This repository comes with a gradle based java project from the start, but any language can be used. If you want to, just replace the java code with one of the other languages from this [GildedRose Refactoring Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata) repository. Clone the repository listed above and replace with your language of choice.
-
-> Some of the tasks makes the assumption that you are using Gradle as your build system. If you replace the code, you need to find other ways to make test and code compilation, so its probably good to choose a languages you are comfortable with.
-
-The description of the application can be read [here](gildedrose.md), but is not necessary to read just yet.
+* **Clone down:** makes the git clone, and prepares the repo for being distributed to the parallel steps
+* **Test:** runs the gradle test command found in [ci/unit-test-app.sh](ci/unit-test-app.sh)
+* **Build:** runs the gradle build command found in [ci/build-app.sh](ci/build-app.sh)
+* **Build docker:** runs both [building of the docker image](ci/build-docker.sh), and [pushes it up to the hub](ci/push-docker.sh)
+* **Component test:** runs a [docker-compose file](component-test/docker-compose.yml) with a [python test](component-test/test_app.py) to test the application.
 
 ## Setup
 
@@ -142,10 +137,6 @@ https://circleci.com/docs/2.0/configuration-reference/#store_test_results
 Hint: The results of running `gradle test` are stored in a local directory: `build/test-results`.
 
 If all works as intended, you should see something like ![test results screenshot](img/test-results.png).
-
-## Run a few iterations on the code
-
-Having your pipeline set up, now it is time to fix the software problem itself. Go back to [the gilded rose description to read about it](gildedrose.md)
 
 ## Building and storing artifacts
 
